@@ -8,10 +8,6 @@ import styles from './Post.module.css';
 import { useState } from 'react';
 
 export function Post({ author, publishedAt, content }) {
-    const [comments, setComments] = useState([
-        1,
-        2,
-    ])
 
     const publishedDateFormatted = format(publishedAt, "LLLL do 'at' haaa", {
         locale: enUS
@@ -22,11 +18,22 @@ export function Post({ author, publishedAt, content }) {
         addSuffix: true
     });
 
+    const [comments, setComments] = useState([
+        'Great post!'
+    ]);
+
+    const [newCommentText, setNewCommentText] = useState('');
+
     const handleCreateNewComment = () => {
         event.preventDefault();
 
-        setComments([...comments, comments.length + 1]);
+        setComments([...comments, newCommentText]);
+        setNewCommentText('');
     };
+
+    const handleNewCommentChange = () => {
+        setNewCommentText(event.target.value);
+    }
 
     return (
         <article className={styles.post}>
@@ -57,7 +64,10 @@ export function Post({ author, publishedAt, content }) {
             <form onSubmit={handleCreateNewComment} className={styles.commentForm}>
                 <strong>Leave your feedback</strong>
                 <textarea
+                    name='comment'
                     placeholder='Leave your comment'
+                    onChange={handleNewCommentChange}
+                    value={newCommentText}
                 />
 
                 <footer>
@@ -67,7 +77,7 @@ export function Post({ author, publishedAt, content }) {
 
             <div className={styles.commentList}>
                 {comments.map(comment => {
-                    return <Comment />
+                    return <Comment content={comment} />
                 })}
             </div>
         </article>
