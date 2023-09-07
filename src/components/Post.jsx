@@ -32,6 +32,7 @@ export function Post({ author, publishedAt, content }) {
     };
 
     const handleNewCommentChange = () => {
+        event.target.setCustomValidity('');
         setNewCommentText(event.target.value);
     }
 
@@ -42,6 +43,12 @@ export function Post({ author, publishedAt, content }) {
 
         setComments(commentsWithoutDeletedOne);
     }
+
+    const handleNewCommentInvalid = () => {
+        event.target.setCustomValidity('This is a required field!');
+    }
+
+    const isNewCommentEmpty = newCommentText.length === 0;
 
     return (
         <article className={styles.post}>
@@ -76,10 +83,14 @@ export function Post({ author, publishedAt, content }) {
                     placeholder='Leave your comment'
                     onChange={handleNewCommentChange}
                     value={newCommentText}
+                    onInvalid={handleNewCommentInvalid}
+                    required
                 />
 
                 <footer>
-                    <button type='submit'>Publish</button>
+                    <button type='submit' disabled={isNewCommentEmpty}>
+                        Publish
+                    </button>
                 </footer>
             </form>
 
